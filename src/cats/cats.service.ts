@@ -60,4 +60,18 @@ export class CatsService {
         return updatedCat;
 
     }
+
+    //Eliminar elemento cat
+    deleteCat(id: number): Cat {
+        const catIndex = this.cats.findIndex(
+            (item) => item.id === id)
+
+        if (catIndex === -1) {
+            throw new Error('Gato no encontrado');
+        }
+
+        const deletedCat = this.cats[catIndex];
+        this.cats.splice(catIndex, 1);
+        return deletedCat;
+    }
 }
