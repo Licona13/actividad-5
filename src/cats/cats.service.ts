@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Cat } from './entities/cat.entity';
 import { CreateCatDto } from './dtos/create-cat.dto';
+import { UpdateCatDto } from './dtos/update-cat.dto';
 
 @Injectable()
 export class CatsService {
@@ -36,5 +37,27 @@ export class CatsService {
         this.cats.push(newCat)
 
         return newCat;
+    }
+
+    //Actualizar elemento cat
+    updateCat(id: number, UpdateCatDto: UpdateCatDto): Cat {
+        const catIndex = this.cats.findIndex(
+            (item) => item.id === id)
+
+        if (catIndex === -1) {
+            throw new Error('Gato no encontrado');
+        }
+
+        const updatedCat: Cat = {
+            ...this.cats[catIndex],
+            ...UpdateCatDto,
+            id: id,
+        }
+        //Reemplazar cat
+        this.cats[catIndex] = updatedCat;
+        console.log(id, UpdateCatDto);
+
+        return updatedCat;
+
     }
 }
