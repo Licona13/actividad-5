@@ -13,4 +13,15 @@ export class CatsService {
     findAll(): Cat[] {
         return this.cats;
     }
+
+    //obtener cat por id
+    getCat(id: number): Cat {
+        const cat = this.cats.find((item) => item.id === id);
+
+        if (!cat) {
+            throw new Error('Gato no encontrado');
+        }
+
+        return cat;
+    }
 }
