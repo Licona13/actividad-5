@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Movie } from './entities/movie.entity';
-import { Cat } from 'src/cats/entities/cat.entity';
+import { CreateMovieDto } from './dtos/create-movie.dto';
+
 
 @Injectable()
 export class MoviesService {
@@ -21,5 +22,16 @@ export class MoviesService {
             throw new Error('Película no encontrada');
         }
         return movie;
+    }
+
+    createMovie(movie: CreateMovieDto): Movie {
+        const newMovie: Movie = {
+            ...movie,
+            id: Date.now()
+        }
+
+        this.movies.push(newMovie)
+
+        return newMovie;
     }
 }
