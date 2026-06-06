@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Movie } from './entities/movie.entity';
 import { CreateMovieDto } from './dtos/create-movie.dto';
+import { UpdateMovieDto } from './dtos/update-movie.dto';
 
 
 @Injectable()
@@ -33,5 +34,26 @@ export class MoviesService {
         this.movies.push(newMovie)
 
         return newMovie;
+    }
+
+    updateMovie(id: number, movie: UpdateMovieDto): Movie {
+        const movieIndex = this.movies.findIndex(
+            (item) => item.id === id)
+
+        if (movieIndex === -1) {
+            throw new Error('Pelicula no encontrado')
+        }
+
+        const updatedMovie: Movie = {
+            ...this.movies[movieIndex],
+            ...movie,
+            id: id,
+        }
+
+        this.movies[movieIndex] = updatedMovie;
+        console.log(id, updatedMovie);
+
+        return updatedMovie;
+
     }
 }
