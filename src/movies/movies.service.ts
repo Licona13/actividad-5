@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Movie } from './entities/movie.entity';
+import { Cat } from 'src/cats/entities/cat.entity';
 
 @Injectable()
 export class MoviesService {
@@ -12,5 +13,13 @@ export class MoviesService {
 
     findAll(): Movie[] {
         return this.movies
+    }
+
+    getMovie(id: number): Movie {
+        const movie = this.movies.find((item) => item.id === id);
+        if (!movie) {
+            throw new Error('Película no encontrada');
+        }
+        return movie;
     }
 }
