@@ -7,12 +7,23 @@ import { StringValue } from 'ms';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [UsersModule, PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET, //jwtConstants.secret,
-      signOptions: { expiresIn: process.env.JWT_EXP as StringValue, },
+  imports: [UsersModule, PassportModule, ConfigModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => {
+        const secret = configService.get<string>('JWT_SECRET');
+        if (!secret) {
+          throw new Error('JWT_SECRET environment variable is required');
+        }
+        return {
+          secret,
+          signOptions: { expiresIn: (configService.get<string>('JWT_EXP') || '24h') as any },
+        };
+      },
+      inject: [ConfigService],
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
